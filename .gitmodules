@@ -1,0 +1,12 @@
+[submodule "hide"]
+	path = hide
+	url = https://github.com/chazzox/hide
+[submodule "groupdm"]
+	path = groupdm
+	url = https://github.com/chazzox/groupdm
+[submodule "discordify"]
+	path = discordify
+	url = https://github.com/chazzox/discordify
+[submodule "VolumeBoost"]
+	path = VolumeBoost
+	url = https://github.com/chazzox/VolumeBoost
