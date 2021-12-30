@@ -10,3 +10,6 @@
 [submodule "VolumeBoost"]
 	path = VolumeBoost
 	url = https://github.com/chazzox/VolumeBoost
+[submodule "plugin-template"]
+	path = plugin-template
+	url = https://github.com/chazzox/plugin-template
