@@ -1,0 +1,38 @@
+#buttonFilterContainer {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-direction: row;
+	flex-grow: 0;
+	align-content: center;
+	background-color: var(--background-modifier-hover);
+	border-radius: 4px;
+	margin-left: 8px;
+	margin-bottom: 8px;
+	margin-top: 4px;
+	height: 42px;
+}
+
+.filterButtons {
+	background: none;
+	transition: color, background-color 0.2s ease;
+	color: var(--channels-default);
+	box-sizing: border-box;
+	border-radius: 4px;
+	font-size: 15px;
+	flex-basis: 30%;
+	padding: 0 2px;
+	border: none;
+	height: 30px;
+	line-height: 30px;
+
+	&.selected {
+		background-color: var(--brand-experiment) !important;
+		color: var(--interactive-selected);
+	}
+
+	&:hover {
+		color: white;
+		background-color: var(--background-modifier-selected);
+	}
+}

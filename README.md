@@ -1,3 +1,3 @@
 # BetterDiscordPlugins
 
-Contains all the betterdiscord plugins I've worked on
+Contains all the Better Discord plugins I've worked on.
