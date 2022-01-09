@@ -1,9 +1,10 @@
 /**
- * @name VolumeBooster
+ * @name volume-boost
  * @description A better discord plugin that allows you to boost user volume past 200%
  * @version 2.0.0
  * @author QWERT and chazzox
  */
+
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -26,13 +27,15 @@ var __toCommonJS = /* @__PURE__ */ ((cache) => {
     return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
   };
 })(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
+
+// volume-boost/src/index.tsx
 var src_exports = {};
 __export(src_exports, {
   default: () => VolumeBooster
 });
-const MULTIPLIER = 2;
-const Slider = BdApi.findModuleByDisplayName("Slider");
-const LOG_STYLES = {
+var MULTIPLIER = 2;
+var Slider = BdApi.findModuleByDisplayName("Slider");
+var LOG_STYLES = {
   color: "#c3c6fc",
   background: "#2c2c2c",
   padding: "2px 0.5em",
@@ -42,12 +45,11 @@ const LOG_STYLES = {
 function debug_log(...output) {
   console.log("%cvolume-boost", Object.entries(LOG_STYLES).map(([a, b]) => `${a}:${b};`).join(""), ...output);
 }
-class VolumeBooster {
+var VolumeBooster = class {
   start() {
     debug_log("Successfully started.");
     BdApi.Patcher.after("volume-boost-slider", Slider.prototype, "render", (_this, [props], _) => {
-      var _a;
-      if (((_a = _this == null ? void 0 : _this.props) == null ? void 0 : _a.className) !== "slider-2zxowp")
+      if (_this?.props?.className !== "slider-2zxowp")
         return;
       _this.props.maxValue = 200 * MULTIPLIER;
       _this.state.range = 200 * MULTIPLIER;
@@ -59,5 +61,5 @@ class VolumeBooster {
     BdApi.Patcher.unpatchAll("volume-boost-slider");
     debug_log("Stopped.");
   }
-}
+};
 module.exports = __toCommonJS(src_exports);

@@ -1,5 +1,26 @@
-import { log_action, filter_mode, filter_mode_styles } from './utils';
 import './index.scss';
+
+function log_action(action_string: string, ...rest: any[]) {
+	console.log(`%c${action_string}`, 'color:red;', ...rest);
+}
+
+enum filter_mode {
+	GROUP = 'GROUP',
+	DM = 'DM',
+	BOTH = 'BOTH'
+}
+
+enum filter_mode_styles {
+	GROUP = `
+a[aria-label~="\(direct"] {
+	display: none;
+}`,
+	DM = `
+a[aria-label~="\(group"] {
+    display: none;
+}`,
+	BOTH = ``
+}
 
 // useful BdApi stuff
 const { React, ReactDOM } = BdApi;
