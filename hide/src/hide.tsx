@@ -89,8 +89,13 @@ const ToggleButton = () => {
 	const [isHidden, setIsHidden] = React.useState(BdApi.loadData('hide-everything', 'isHidden'));
 
 	React.useEffect(() => {
-		if (isHidden) BdApi.injectCSS(css_id, HideStyles);
-		else BdApi.clearCSS(css_id);
+		if (isHidden) {
+			BdApi.injectCSS(css_id, HideStyles);
+			// turn off camera and deafen (if they are on)
+		} else {
+			BdApi.clearCSS(css_id);
+			// turn on camera and un-deafen (if they are off because we turned them off)
+		}
 	}, [isHidden]);
 
 	return (
