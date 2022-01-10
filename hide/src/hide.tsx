@@ -88,26 +88,30 @@ const Icon: React.FC<{ line: boolean }> = ({ line }) => {
 const ToggleButton = () => {
 	const [isHidden, setIsHidden] = React.useState(BdApi.loadData('hide-everything', 'isHidden'));
 
-	React.useEffect(() => {
-		if (isHidden) {
-			BdApi.injectCSS(css_id, HideStyles);
-			// turn off camera and deafen (if they are on)
-		} else {
-			BdApi.clearCSS(css_id);
-			// turn on camera and un-deafen (if they are off because we turned them off)
-		}
-	}, [isHidden]);
+	const toggleHiddenWithSideEffects = () =>
+		setIsHidden((prev) => {
+			// new value of isHidden
+			const isHidden = !prev;
+
+			const deafenButton = document.querySelector<HTMLElement>('button[aria-label="Deafen"]');
+
+			if (isHidden) {
+				BdApi.injectCSS(css_id, HideStyles);
+				// deafen if not deafened already
+				if (deafenButton.attributes.getNamedItem('aria-checked').value == 'false') deafenButton?.click();
+				document.querySelector<HTMLElement>('button[aria-label="Turn off camera"]')?.click();
+			} else {
+				BdApi.clearCSS(css_id);
+				// un-deafen if not un-deafened already
+				if (deafenButton.attributes.getNamedItem('aria-checked').value == 'true') deafenButton?.click();
+				document.querySelector<HTMLElement>('button[aria-label="Turn on camera"]')?.click();
+			}
+
+			return isHidden;
+		});
 
 	return (
-		<button
-			id="toolButton"
-			onClick={() =>
-				setIsHidden((prev: any) => {
-					BdApi.setData('hide-everything', 'isHidden', !prev);
-					return !prev;
-				})
-			}
-		>
+		<button id="toolButton" onClick={toggleHiddenWithSideEffects}>
 			<div className="iconWrapper-2OrFZ1 clickable-3rdHwn">
 				<Icon line={isHidden} />
 				<div id="tooltip" className="tooltip-2QfLtc tooltipBottom-3ARrEK tooltipPrimary-1d1ph4">
