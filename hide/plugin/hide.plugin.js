@@ -33,20 +33,20 @@ var __toCommonJS = /* @__PURE__ */ ((cache) => {
   };
 })(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
-// hide/src/hide.tsx
+// src/hide.tsx
 var hide_exports = {};
 __export(hide_exports, {
   default: () => hide
 });
 
-// react-inject/react.ts
+// ../react-inject/react.ts
 var React = BdApi.React;
 var react_default = React;
 
-// hide/src/index.scss
+// src/index.scss
 BdApi.injectCSS("hide-styles", "#toolButton{background:none;padding:0;margin:0;outline:none;position:relative;margin-right:6px}#toolButton #tooltip{visibility:hidden;position:absolute;left:50%;bottom:-8px;transform:translate(-50%, 100%)}#toolButton svg *{fill:var(--interactive-normal)}#toolButton:hover svg *{fill:var(--interactive-hover)}#toolButton:hover #tooltip{visibility:visible}");
 
-// hide/src/hide.tsx
+// src/hide.tsx
 var css_id = "hide";
 var selectors = [
   ".nowPlayingColumn-2sl4cE",
@@ -76,7 +76,7 @@ var selectors = [
 ];
 var HideStyles = `
 ${selectors.join(", ")} {
-    display: none
+    display: none;
 }
 
 h2.title-30qZAO.container-2ax-kl {

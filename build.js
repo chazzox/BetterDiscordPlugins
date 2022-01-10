@@ -13,7 +13,7 @@ if (commandLineArgs.length != 2)
 const bundleTypeStr = commandLineArgs[0];
 const projectPath = commandLineArgs[1];
 const isWatch = { build: false, watch: true }[bundleTypeStr];
-const config = require(path.join(__dirname, projectPath, 'bd.config.js'));
+const config = require(path.join(process.cwd(), projectPath, 'bd.config.js'));
 
 const root = path.resolve(__dirname);
 

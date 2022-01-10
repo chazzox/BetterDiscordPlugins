@@ -32,7 +32,7 @@ const selectors = [
 
 const HideStyles = `
 ${selectors.join(', ')} {
-    display: none
+    display: none;
 }
 
 h2.title-30qZAO.container-2ax-kl {
