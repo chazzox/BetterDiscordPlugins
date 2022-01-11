@@ -48,7 +48,7 @@ h2.title-x4dI75.container-q97qHp::before {
 
 const Icon: React.FC<{ line: boolean }> = ({ line }) => {
 	return (
-		<svg className="icon-2xnN2Y" width="400" height="237.55102040816325" viewBox="0, 0, 400,237.55102040816325">
+		<svg className="icon-2xnN2Y" width="400" height="237.55102040816325" viewBox="8.205 0.283 384.13 236.316">
 			<g>
 				<g>
 					<path
