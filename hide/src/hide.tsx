@@ -5,15 +5,15 @@ const css_id = 'hide';
 
 const selectors = [
 	'.nowPlayingColumn-2sl4cE',
-	'.content-3YMskv > .peopleListItem-2nzedh',
+	'.content-3YMskv > .peopleListItem-u6dGxF',
 	'.wrapper-24pKcD',
 	'.panel-24C3ux.activityPanel-28dQGo',
-	'.content-yTz4x3',
+	'.content-1jQy2l',
 	'a[aria-label~="(direct"], a[aria-label~="(group"]',
 	'div[aria-label="Servers"]',
 	'.children-gzQq2t',
 	'.badge-1Skb69.numberBadge-2s8kKX.base-PmTxvP.baseShapeRound-1Mm1YW',
-	'.peopleListItem-2nzedh',
+	'.peopleListItem-u6dGxF',
 	'.lowerBadge-29hYVK',
 	'.privateChannelRecipientsInviteButtonIcon-3A3uTc.iconWrapper-2OrFZ1.clickable-3rdHwn',
 	'.bottomControls-lIJyYL.controlSection-2h3cS0',
@@ -23,10 +23,10 @@ const selectors = [
 	'.pictureInPicture-3VocJq',
 	'.listItems-1uJgMC',
 	'.scroller-1Bvpku > div:not([class])',
-	'h3.cursorPointer-1j7DL8.title-29uC1r.fontDisplay-1dagSA.base-1x0h_U.size16-1P40sf',
+	'h3.cursorPointer-3JF56F.title-17SveM.fontDisplay-3Gtuks.base-21yXnu',
 	'.status-1XNdyw.disableFlex-2QuzIB',
-	'.akaBadge-1M-1Gw.textBadge-1iylP6.base-PmTxvP.baseShapeRound-1Mm1YW',
-	'.nicknames-1XK4Zt.overflow-WK9Ogt',
+	'.akaBadge-3i7V3p.textBadge-1fdDPJ.base-3IDx3L.baseShapeRound-3epLEv',
+	'.nicknames-10Sg6e.overflow-1wOqNV',
 	'div[data-list-id="pins"] > div'
 ];
 
@@ -35,11 +35,11 @@ ${selectors.join(', ')} {
     display: none;
 }
 
-h2.title-30qZAO.container-2ax-kl {
+h2.title-x4dI75.container-q97qHp {
     color: rgba(255,255,255,0);
 }
 
-h2.title-30qZAO.container-2ax-kl::before {
+h2.title-x4dI75.container-q97qHp::before {
     content: 'Online - 0';
     opacity: 1;
     display: block;
@@ -48,7 +48,7 @@ h2.title-30qZAO.container-2ax-kl::before {
 
 const Icon: React.FC<{ line: boolean }> = ({ line }) => {
 	return (
-		<svg className="icon-22AiRD" width="400" height="237.55102040816325" viewBox="0, 0, 400,237.55102040816325">
+		<svg className="icon-2xnN2Y" width="400" height="237.55102040816325" viewBox="0, 0, 400,237.55102040816325">
 			<g>
 				<g>
 					<path
@@ -98,12 +98,12 @@ const ToggleButton = () => {
 			if (isHidden) {
 				BdApi.injectCSS(css_id, HideStyles);
 				// deafen if not deafened already
-				if (deafenButton.attributes.getNamedItem('aria-checked').value == 'false') deafenButton?.click();
+				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'false') deafenButton?.click();
 				document.querySelector<HTMLElement>('button[aria-label="Turn off camera"]')?.click();
 			} else {
 				BdApi.clearCSS(css_id);
 				// un-deafen if not un-deafened already
-				if (deafenButton.attributes.getNamedItem('aria-checked').value == 'true') deafenButton?.click();
+				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'true') deafenButton?.click();
 				document.querySelector<HTMLElement>('button[aria-label="Turn on camera"]')?.click();
 			}
 
@@ -112,11 +112,11 @@ const ToggleButton = () => {
 
 	return (
 		<button id="toolButton" onClick={toggleHiddenWithSideEffects}>
-			<div className="iconWrapper-2OrFZ1 clickable-3rdHwn">
+			<div className="iconWrapper-2awDjA clickable-ZD7xvu">
 				<Icon line={isHidden} />
-				<div id="tooltip" className="tooltip-2QfLtc tooltipBottom-3ARrEK tooltipPrimary-1d1ph4">
-					<div className="tooltipPointer-3ZfirK"></div>
-					<div className="tooltipContent-bqVLWK">{isHidden ? 'Show' : 'Hide'}</div>
+				<div id="tooltip" className="tooltip-14MtrL tooltipBottom-2WzfVx tooltipPrimary-3qLMbS">
+					<div className="tooltipPointer-3L49xb"></div>
+					<div className="tooltipContent-Nejnvh">{isHidden ? 'Show' : 'Hide'}</div>
 				</div>
 			</div>
 		</button>
