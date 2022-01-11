@@ -28,7 +28,7 @@ var __toCommonJS = /* @__PURE__ */ ((cache) => {
   };
 })(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
-// volume-boost/src/index.tsx
+// src/index.tsx
 var src_exports = {};
 __export(src_exports, {
   default: () => VolumeBooster
@@ -49,7 +49,7 @@ var VolumeBooster = class {
   start() {
     debug_log("Successfully started.");
     BdApi.Patcher.after("volume-boost-slider", Slider.prototype, "render", (_this, [props], _) => {
-      if (_this?.props?.className !== "slider-2zxowp")
+      if (_this?.props?.className !== "slider-BEB8u7")
         return;
       _this.props.maxValue = 200 * MULTIPLIER;
       _this.state.range = 200 * MULTIPLIER;

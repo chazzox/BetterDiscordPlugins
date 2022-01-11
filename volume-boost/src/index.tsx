@@ -32,7 +32,7 @@ export default class VolumeBooster {
 
 		// @ts-expect-error
 		BdApi.Patcher.after('volume-boost-slider', Slider.prototype, 'render', (_this: any, [props], _) => {
-			if (_this?.props?.className !== 'slider-2zxowp') return;
+			if (_this?.props?.className !== 'slider-BEB8u7') return;
 			_this.props.maxValue = 200 * MULTIPLIER;
 			_this.state.range = 200 * MULTIPLIER;
 			_this.state.max = 200 * MULTIPLIER;

@@ -1,0 +1,6 @@
+{
+	"scripts": {
+		"watch": "node ../build.js watch ./",
+		"build": "node ../build.js watch ./"
+	}
+}
