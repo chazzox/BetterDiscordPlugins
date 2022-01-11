@@ -7,7 +7,7 @@ const selectors = [
 	'.nowPlayingColumn-2sl4cE',
 	'.content-3YMskv > .peopleListItem-u6dGxF',
 	'.wrapper-24pKcD',
-	'.panel-24C3ux.activityPanel-28dQGo',
+	'.itemCard-3Etziu.wrapper-2RrXDg.outer-2JOHae.padded-2NSY6O.interactive-2zD88a',
 	'.content-1jQy2l',
 	'a[aria-label~="(direct"], a[aria-label~="(group"]',
 	'div[aria-label="Servers"]',

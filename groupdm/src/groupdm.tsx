@@ -25,7 +25,7 @@ a[aria-label~="\(group"] {
 // useful BdApi stuff
 const { React, ReactDOM } = BdApi;
 
-const siblingClassName = 'privateChannelsHeaderContainer-3NB1K1';
+const siblingClassName = '.privateChannelsHeaderContainer-1UWASm';
 const buttonContainerId = 'buttonFilterContainer';
 const cssId = 'groupdm-filter';
 
@@ -67,20 +67,20 @@ function FilterButtons() {
 }
 
 function create_dom_container() {
-	const beforeEl = document.getElementsByClassName(siblingClassName)[0];
+	const beforeEl = document.querySelector(siblingClassName);
 	const buttonContainer = document.createElement('div');
 	buttonContainer.id = buttonContainerId;
 	beforeEl.insertAdjacentElement('afterend', buttonContainer);
 }
 
 async function render_filter_buttons() {
-	if (document.getElementsByClassName(siblingClassName)[0] && !document.getElementById(buttonContainerId)) {
+	if (document.querySelector(siblingClassName) && !document.getElementById(buttonContainerId)) {
 		create_dom_container();
 		ReactDOM.render(<FilterButtons />, document.getElementById(buttonContainerId));
 	}
 }
 
-module.exports = class groupdm {
+export default class groupdm {
 	load() {
 		BdApi.saveData('groupdm', 'isGroup', filter_mode.DM);
 	}
@@ -95,4 +95,4 @@ module.exports = class groupdm {
 	onSwitch() {
 		render_filter_buttons();
 	}
-};
+}
