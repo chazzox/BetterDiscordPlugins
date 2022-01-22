@@ -9,7 +9,29 @@
  * @donate https://www.paypal.me/chazzox
  * @updateUrl https://raw.githubusercontent.com/chazzox/BetterDiscordPlugins/main/hide/plugin/hide.plugin.js
  */
-
+/*@cc_on
+@if (@_jscript)
+    // Offer to self-install for clueless users that try to run this directly.
+    var shell = WScript.CreateObject("WScript.Shell")
+    var fs = new ActiveXObject("Scripting.FileSystemObject")
+    var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%BetterDiscordplugins")
+    var pathSelf = WScript.ScriptFullName
+    // Put the user at ease by addressing them in the first person
+    shell.Popup("It looks like you've mistakenly tried to run me directly. 
+(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30)
+    if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
+        shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40)
+    } else if (!fs.FolderExists(pathPlugins)) {
+        shell.Popup("I can't find the BetterDiscord plugins folder.
+Are you sure it's even installed?", 0, "Can't install myself", 0x10)
+    } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
+        fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true)
+        // Show the user where to put plugins in the future
+        shell.Exec("explorer " + pathPlugins)
+        shell.Popup("I'm installed!", 0, "Successfully installed", 0x40)
+    }
+    WScript.Quit()
+@else@*/
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -48,7 +70,6 @@ BdApi.injectCSS("hide-styles", "#toolButton{background:none;padding:0;margin:0;o
 
 // src/hide.tsx
 var css_id = "hide";
-var camera_selector = 'button[aria-label="Turn off camera"]';
 var selectors = [
   ".nowPlayingColumn-2sl4cE",
   ".content-3YMskv > .peopleListItem-u6dGxF",
@@ -119,12 +140,12 @@ var ToggleButton = () => {
       BdApi.injectCSS(css_id, HideStyles);
       if (deafenButton?.attributes?.getNamedItem("aria-checked")?.value == "false")
         deafenButton?.click();
-      document.querySelector(camera_selector)?.click();
+      document.querySelector('button[aria-label="Turn off camera"]')?.click();
     } else {
       BdApi.clearCSS(css_id);
       if (deafenButton?.attributes?.getNamedItem("aria-checked")?.value == "true")
         deafenButton?.click();
-      document.querySelector(camera_selector)?.click();
+      document.querySelector('button[aria-label="Turn on Camera"]')?.click();
     }
     return isHidden2;
   });
@@ -159,3 +180,4 @@ var hide = class {
   }
 };
 module.exports = __toCommonJS(hide_exports);
+/*@end@*/
