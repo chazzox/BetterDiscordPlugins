@@ -26,6 +26,9 @@ const watch = {
 	}
 };
 
+const header = '';
+const footer = '';
+
 function GetBetterDiscordPath() {
 	switch (os.platform()) {
 		case 'darwin':
@@ -42,7 +45,8 @@ function GetBetterDiscordPath() {
 esbuild
 	.build({
 		entryPoints: config.entries.map((p) => path.join(projectPath, p)),
-		banner: { js: config.meta },
+		banner: { js: config.meta + header },
+		footer: { js: footer },
 		...(isWatch && watch),
 		format: 'cjs',
 		logLevel: 'silent',

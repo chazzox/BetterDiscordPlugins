@@ -33,7 +33,7 @@ var src_exports = {};
 __export(src_exports, {
   default: () => VolumeBooster
 });
-var MULTIPLIER = 2;
+var MULTIPLIER = 4;
 var Slider = BdApi.findModuleByDisplayName("Slider");
 var LOG_STYLES = {
   color: "#c3c6fc",

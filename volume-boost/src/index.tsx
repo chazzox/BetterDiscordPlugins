@@ -5,7 +5,7 @@
  * @author QWERT & CHAZZOX
  */
 
-const MULTIPLIER = 2;
+const MULTIPLIER = 4;
 const Slider = BdApi.findModuleByDisplayName('Slider');
 
 const LOG_STYLES = {
