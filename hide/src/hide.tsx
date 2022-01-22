@@ -3,6 +3,8 @@ import './index.scss';
 
 const css_id = 'hide';
 
+const camera_selector = 'button[aria-label="Turn off camera"]';
+
 const selectors = [
 	'.nowPlayingColumn-2sl4cE',
 	'.content-3YMskv > .peopleListItem-u6dGxF',
@@ -99,12 +101,12 @@ const ToggleButton = () => {
 				BdApi.injectCSS(css_id, HideStyles);
 				// deafen if not deafened already
 				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'false') deafenButton?.click();
-				document.querySelector<HTMLElement>('button[aria-label="Turn off camera"]')?.click();
+				document.querySelector<HTMLElement>(camera_selector)?.click();
 			} else {
 				BdApi.clearCSS(css_id);
 				// un-deafen if not un-deafened already
 				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'true') deafenButton?.click();
-				document.querySelector<HTMLElement>('button[aria-label="Turn on camera"]')?.click();
+				document.querySelector<HTMLElement>(camera_selector)?.click();
 			}
 
 			return isHidden;
