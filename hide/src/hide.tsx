@@ -3,8 +3,6 @@ import './index.scss';
 
 const css_id = 'hide';
 
-const camera_selector = 'button[aria-label="Turn off camera"]';
-
 const selectors = [
 	'.nowPlayingColumn-2sl4cE',
 	'.content-3YMskv > .peopleListItem-u6dGxF',
@@ -101,12 +99,24 @@ const ToggleButton = () => {
 				BdApi.injectCSS(css_id, HideStyles);
 				// deafen if not deafened already
 				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'false') deafenButton?.click();
-				document.querySelector<HTMLElement>('button[aria-label="Turn off camera"]')?.click();
+
+				const cameraOffDom = document.querySelector<HTMLElement>('button[aria-label="Turn off Camera"]');
+				if (cameraOffDom) {
+					cameraOffDom?.click();
+					BdApi.setData('hide', 'cameraToggled', true);
+				}
 			} else {
 				BdApi.clearCSS(css_id);
 				// un-deafen if not un-deafened already
 				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'true') deafenButton?.click();
-				document.querySelector<HTMLElement>('button[aria-label="Turn on Camera"]')?.click();
+
+				if (BdApi.loadData('hide', 'cameraToggled')) {
+					const cameraOnDom = document.querySelector<HTMLElement>('button[aria-label="Turn on Camera"]');
+					if (cameraOnDom) {
+						cameraOnDom?.click();
+						BdApi.setData('hide', 'cameraToggled', false);
+					}
+				}
 			}
 
 			return isHidden;
@@ -128,6 +138,7 @@ const ToggleButton = () => {
 export default class hide {
 	load() {
 		BdApi.setData('hide', 'isHidden', true);
+		BdApi.setData('hide', 'cameraToggled', false);
 	}
 	start() {
 		const HeaderBarContainer = BdApi.findModuleByDisplayName('HeaderBarContainer')?.prototype;
