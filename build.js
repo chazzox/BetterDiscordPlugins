@@ -1,5 +1,6 @@
 const sass = require('sass');
 const esbuild = require('esbuild');
+const chalk = require('chalk');
 const alias = require('esbuild-plugin-alias');
 
 const path = require('path');
@@ -20,7 +21,7 @@ const root = path.resolve(__dirname);
 const watch = {
 	watch: {
 		onRebuild(error, result) {
-			if (error) errorHandler(error);
+			if (error) esFail(error);
 			else finishBuild(result);
 		}
 	}
@@ -106,10 +107,11 @@ esbuild
 				name: 'perf',
 				setup(build) {
 					build.onStart(() => {
-						console.time('⚡ build took');
+						console.time(chalk.green('  ⚡ build took'));
 					});
 					build.onEnd(() => {
-						console.timeEnd('⚡ build took');
+						console.timeEnd(chalk.green('  ⚡ build took'));
+						console.log();
 					});
 				}
 			},
@@ -121,12 +123,12 @@ esbuild
 		]
 	})
 	.then(({ outputFiles }) => {
-		writeFile([path.join(projectPath, config.out), path.join(...GetBetterDiscordPath())], outputFiles[0].contents);
+		writeFile(
+			[path.join(projectPath, config.out), path.join(...GetBetterDiscordPath(), config.name)],
+			outputFiles[0].contents
+		);
 	})
-	.catch((err) => {
-		console.error('🚨', '\x1b[41m', 'BUILD FAILED', '\x1b[0m', '🚨');
-		err.errors.forEach((err) => console.error(err.detail));
-	});
+	.catch(esFail);
 
 /**
  * @description writes data to file with a nice log on completion
@@ -134,13 +136,22 @@ esbuild
  * @param {NodeJS.ArrayBufferView} data file data to write
  */
 function writeFile(paths, data) {
-	try {
-		paths.forEach((p) =>
-			fs.writeFile(p, data, (err) => {
-				if (err) throw { path: p, error: err };
-			})
-		);
-	} catch (err) {
-		console.error(err);
-	}
+	paths.forEach((p) => {
+		fs.writeFile(p, data, (err) => {
+			if (err) {
+				console.error('🚨', chalk.bgRed` WRITING DATA FAILED `, '🚨');
+				console.log(chalk.red`Could not write data file to path: '${err.path}'`);
+			}
+		});
+	});
+}
+
+function esFail(err) {
+	console.error('🚨', chalk.bgRed('  BUILD FAILED  '), '🚨');
+
+	err.errors.forEach((err) => {
+		console.log(err.location);
+		console.error('file:', err.location.file);
+		console.error(`caused by: ${err.location.lineText.trim()}`);
+	});
 }
