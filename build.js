@@ -8,24 +8,16 @@ const os = require('os');
 const fs = require('fs');
 
 const commandLineArgs = process.argv.slice(2);
-if (commandLineArgs.length != 2)
-	throw Error('Arguments not recognised please use the format `node build.js <build|watch> <project_path>`');
+if (commandLineArgs.length < 2)
+	throw Error(
+		'Arguments not recognised please use the format `node build.js <build|watch> <project_path> <project_path> <project_path> ...`'
+	);
 
 const bundleTypeStr = commandLineArgs[0];
-const projectPath = commandLineArgs[1];
+const projectPaths = commandLineArgs.slice(1);
 const isWatch = { build: false, watch: true }[bundleTypeStr];
-const config = require(path.join(process.cwd(), projectPath, 'bd.config.js'));
 
 const root = path.resolve(__dirname);
-
-const watch = {
-	watch: {
-		onRebuild(error, result) {
-			if (error) esFail(error);
-			else finishBuild(result);
-		}
-	}
-};
 
 /**
  * @description the self installer header for windows
@@ -58,7 +50,7 @@ const footer = `/*@end@*/`;
 function GetBetterDiscordPath() {
 	switch (os.platform()) {
 		case 'darwin':
-			return [process.env.HOME, 'Library/Application Support/BetterDiscord/plugins/'];
+			return [process.env.HOME, '/Library/Application Support/BetterDiscord/plugins/'];
 		case 'win32':
 			return [process.env.HOME, 'AppData/Roaming/BetterDiscord/plugins/'];
 		default:
@@ -68,70 +60,87 @@ function GetBetterDiscordPath() {
 	}
 }
 
-esbuild
-	.build({
-		entryPoints: config.entries.map((p) => path.join(projectPath, p)),
-		banner: { js: config.meta + header },
-		footer: { js: footer },
-		...(isWatch && watch),
-		format: 'cjs',
-		logLevel: 'silent',
-		write: false,
-		bundle: true,
-		plugins: [
-			// sass
-			{
-				name: 'sass',
-				setup(build) {
-					build.onLoad({ filter: /.scss$/ }, (args) => {
-						const { css } = sass.compile(args.path, {
-							style: 'compressed',
-							logger: {
-								debug(message, {}) {
-									return 'hello';
-								},
-								warn(warning, {}) {
-									return 'hello';
-								}
-							}
-						});
+projectPaths.map((projectPath) => {
+	/**
+	 * @type {{name:string, meta: string, entries: string[], outDir?: string}}
+	 */
+	const config = require(path.join(process.cwd(), projectPath, 'bd.config.js'));
 
-						return {
-							contents: `BdApi.injectCSS('${config.name}-styles', '${css.trim()}')`,
-							loader: 'js'
-						};
-					});
-				}
-			},
-			{
-				name: 'perf',
-				setup(build) {
-					build.onStart(() => {
-						console.time(chalk.green('  ⚡ build took'));
-					});
-					build.onEnd(() => {
-						console.timeEnd(chalk.green('  ⚡ build took'));
-						console.log();
-					});
-				}
-			},
-			// allows the use of the BdApi global
-			alias({
-				react: path.resolve(root, 'react-inject/react.ts'),
-				'react-dom': path.resolve(root, 'react-inject/react-dom.ts')
-			})
-		]
-	})
-	.then(({ outputFiles }) => {
+	/**
+	 *
+	 * @param {import('esbuild').BuildResult} res the build result
+	 */
+	function esbuildSuccess({ outputFiles }) {
+		const outputPaths = [[projectPath, config?.outDir], GetBetterDiscordPath()];
+		console.log(outputPaths);
 		writeFile(
-			[path.join(projectPath, config.out), path.join(...GetBetterDiscordPath(), config.name)],
+			outputPaths.map((pArr) => path.join(...pArr.filter((e) => e), `${config.name}.plugin.js`)),
 			outputFiles[0].contents
 		);
-	})
-	.catch(esFail);
+	}
+
+	esbuild
+		.build({
+			entryPoints: config.entries.map((p) => path.join(projectPath, p)),
+			banner: { js: config.meta + header },
+			footer: { js: footer },
+			...(isWatch && {
+				watch: {
+					onRebuild(error, result) {
+						if (error) esbuildFail(error);
+						else esbuildSuccess(result);
+					}
+				}
+			}),
+			format: 'cjs',
+			logLevel: 'silent',
+			write: false,
+			bundle: true,
+			plugins: [
+				// sass
+				{
+					name: 'sass',
+					setup(build) {
+						build.onLoad({ filter: /.scss$/ }, (args) => {
+							const { css } = sass.compile(args.path, {
+								style: 'compressed'
+							});
+
+							return {
+								contents: `BdApi.injectCSS('${config.name}-styles', '${css.trim()}')`,
+								loader: 'js'
+							};
+						});
+					}
+				},
+				// build time logs
+				{
+					name: 'perf',
+					setup(build) {
+						const label = `  ⚡ build took for '${projectPath}'`;
+						build.onStart(() => {
+							console.time(chalk.green(label));
+						});
+						build.onEnd(() => {
+							console.timeEnd(chalk.green(label));
+						});
+					}
+				},
+				// allows the use of the BdApi global
+				// @ts-ignore
+				alias({
+					react: path.resolve(root, './utils/react.ts'),
+					'react-dom': path.resolve(root, './utils/react-dom.ts'),
+					'@utils': path.resolve(root)
+				})
+			]
+		})
+		.then(esbuildSuccess)
+		.catch(esbuildFail);
+});
 
 /**
- * @description writes data to file with a nice log on completion
+ * writes data to file with a nice log on completion
  * @param {string[]} paths where the file is
  * @param {NodeJS.ArrayBufferView} data file data to write
  */
@@ -139,6 +148,7 @@ function writeFile(paths, data) {
 	paths.forEach((p) => {
 		fs.writeFile(p, data, (err) => {
 			if (err) {
+				console.log(err);
 				console.error('🚨', chalk.bgRed` WRITING DATA FAILED `, '🚨');
 				console.log(chalk.red`Could not write data file to path: '${err.path}'`);
 			}
@@ -146,12 +156,17 @@ function writeFile(paths, data) {
 	});
 }
 
-function esFail(err) {
+/**
+ * In the event a esbuild build fails
+ * @param {*} err
+ */
+function esbuildFail(err) {
 	console.error('🚨', chalk.bgRed('  BUILD FAILED  '), '🚨');
+	if (!err.errors) console.log(err);
 
 	err.errors.forEach((err) => {
-		console.log(err.location);
-		console.error('file:', err.location.file);
-		console.error(`caused by: ${err.location.lineText.trim()}`);
+		console.error('file:', chalk.blue(err.location.file));
+		console.error(`line: ${chalk.blue(err.location.line)}, column: ${chalk.blue(err.location.column)}`);
+		console.error(`caused by: ${chalk.blue(err.location.lineText.trim())}`);
 	});
 }

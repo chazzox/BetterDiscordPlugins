@@ -12,6 +12,6 @@ module.exports = {
  * @updateUrl https://raw.githubusercontent.com/chazzox/BetterDiscordPlugins/main/hide/plugin/hide.plugin.js
  */
 `,
-	out: 'plugin/hide.plugin.js',
-	entries: ['src/hide.tsx']
+	entries: ['src/hide.tsx'],
+	outDir: 'plugin'
 };

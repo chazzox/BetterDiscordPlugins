@@ -7,6 +7,5 @@ module.exports = {
  * @version 0.5.0  
  */
 `,
-	out: 'plugin/groupdm.plugin.js',
 	entries: ['src/groupdm.tsx']
 };

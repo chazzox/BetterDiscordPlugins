@@ -8,27 +8,12 @@
 const MULTIPLIER = 4;
 const Slider = BdApi.findModuleByDisplayName('Slider');
 
-const LOG_STYLES = {
-	color: '#c3c6fc',
-	background: '#2c2c2c',
-	padding: '2px 0.5em',
-	'border-radius': '0.5em',
-	'font-weight': 'bold'
-};
+import * as Utils from '../../utils/bd-utils';
 
-function debug_log(...output: any): void {
-	console.log(
-		'%c' + 'volume-boost',
-		Object.entries(LOG_STYLES)
-			.map(([a, b]) => `${a}:${b};`)
-			.join(''),
-		...output
-	);
-}
-
+const log = (data: any) => Utils.log(undefined, 'VolumeBooster', data);
 export default class VolumeBooster {
 	start() {
-		debug_log('Successfully started.');
+		log('Successfully started.');
 
 		// @ts-expect-error
 		BdApi.Patcher.after('volume-boost-slider', Slider.prototype, 'render', (_this: any, [props], _) => {
@@ -43,6 +28,6 @@ export default class VolumeBooster {
 	stop() {
 		// @ts-expect-error
 		BdApi.Patcher.unpatchAll('volume-boost-slider');
-		debug_log('Stopped.');
+		log('Stopped.');
 	}
 }

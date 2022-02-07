@@ -7,6 +7,5 @@ module.exports = {
  * @author QWERT and chazzox
  */
 `,
-	out: 'plugin/volume-boost.plugin.js',
 	entries: ['src/index.tsx']
 };

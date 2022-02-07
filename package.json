@@ -1,4 +1,7 @@
 {
+	"scripts": {
+		"build-all": "node build build volume-boost hide groupdm discordify"
+	},
 	"devDependencies": {
 		"@types/bandagedbd__bdapi": "^0.3.3",
 		"esbuild": "^0.14.11",

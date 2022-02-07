@@ -4,7 +4,29 @@
  * @description Group your Dms and Group Chats separately
  * @version 0.5.0  
  */
-
+/*@cc_on
+@if (@_jscript)
+    // Offer to self-install for clueless users that try to run this directly.
+    var shell = WScript.CreateObject("WScript.Shell")
+    var fs = new ActiveXObject("Scripting.FileSystemObject")
+    var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%BetterDiscordplugins")
+    var pathSelf = WScript.ScriptFullName
+    // Put the user at ease by addressing them in the first person
+    shell.Popup("It looks like you've mistakenly tried to run me directly. 
+(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30)
+    if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
+        shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40)
+    } else if (!fs.FolderExists(pathPlugins)) {
+        shell.Popup("I can't find the BetterDiscord plugins folder.
+Are you sure it's even installed?", 0, "Can't install myself", 0x10)
+    } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
+        fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true)
+        // Show the user where to put plugins in the future
+        shell.Exec("explorer " + pathPlugins)
+        shell.Popup("I'm installed!", 0, "Successfully installed", 0x40)
+    }
+    WScript.Quit()
+@else@*/
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -28,16 +50,16 @@ var __toCommonJS = /* @__PURE__ */ ((cache) => {
   };
 })(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
-// src/groupdm.tsx
+// groupdm/src/groupdm.tsx
 var groupdm_exports = {};
 __export(groupdm_exports, {
   default: () => groupdm
 });
 
-// src/index.scss
+// groupdm/src/index.scss
 BdApi.injectCSS("groupdm-styles", "#buttonFilterContainer{display:flex;justify-content:space-evenly;align-items:center;flex-direction:row;flex-grow:0;align-content:center;background-color:var(--background-modifier-hover);border-radius:4px;margin-left:8px;margin-bottom:8px;margin-top:4px;height:42px}.filterButtons{background:none;transition:color,background-color .2s ease;color:var(--channels-default);box-sizing:border-box;border-radius:4px;font-size:15px;flex-basis:30%;padding:0 2px;border:none;height:30px;line-height:30px}.filterButtons.selected{background-color:var(--brand-experiment) !important;color:var(--interactive-selected)}.filterButtons:hover{color:#fff;background-color:var(--background-modifier-selected)}");
 
-// src/groupdm.tsx
+// groupdm/src/groupdm.tsx
 function log_action(action_string, ...rest) {
   console.log(`%c${action_string}`, "color:red;", ...rest);
 }
@@ -107,3 +129,4 @@ var groupdm = class {
   }
 };
 module.exports = __toCommonJS(groupdm_exports);
+/*@end@*/
