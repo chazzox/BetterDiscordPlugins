@@ -72,7 +72,7 @@ projectPaths.map((projectPath) => {
 	 */
 	function esbuildSuccess({ outputFiles }) {
 		const outputPaths = [[projectPath, config?.outDir], GetBetterDiscordPath()];
-		console.log(outputPaths);
+
 		writeFile(
 			outputPaths.map((pArr) => path.join(...pArr.filter((e) => e), `${config.name}.plugin.js`)),
 			outputFiles[0].contents
@@ -148,7 +148,6 @@ function writeFile(paths, data) {
 	paths.forEach((p) => {
 		fs.writeFile(p, data, (err) => {
 			if (err) {
-				console.log(err);
 				console.error('🚨', chalk.bgRed` WRITING DATA FAILED `, '🚨');
 				console.log(chalk.red`Could not write data file to path: '${err.path}'`);
 			}
@@ -162,7 +161,6 @@ function writeFile(paths, data) {
  */
 function esbuildFail(err) {
 	console.error('🚨', chalk.bgRed('  BUILD FAILED  '), '🚨');
-	if (!err.errors) console.log(err);
 
 	err.errors.forEach((err) => {
 		console.error('file:', chalk.blue(err.location.file));

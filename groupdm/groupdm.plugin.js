@@ -56,13 +56,22 @@ __export(groupdm_exports, {
   default: () => groupdm
 });
 
+// utils/bd-utils.ts
+var LOG_STYLES = {
+  color: "#c3c6fc",
+  background: "#2c2c2c",
+  padding: "2px 0.5em",
+  "border-radius": "0.5em",
+  "font-weight": "bold"
+};
+function log(style = LOG_STYLES, prefix, ...output) {
+  console.log(`%c${prefix}`, Object.entries(style).map(([a, b]) => `${a}:${b};`).join(""), ...output);
+}
+
 // groupdm/src/index.scss
 BdApi.injectCSS("groupdm-styles", "#buttonFilterContainer{display:flex;justify-content:space-evenly;align-items:center;flex-direction:row;flex-grow:0;align-content:center;background-color:var(--background-modifier-hover);border-radius:4px;margin-left:8px;margin-bottom:8px;margin-top:4px;height:42px}.filterButtons{background:none;transition:color,background-color .2s ease;color:var(--channels-default);box-sizing:border-box;border-radius:4px;font-size:15px;flex-basis:30%;padding:0 2px;border:none;height:30px;line-height:30px}.filterButtons.selected{background-color:var(--brand-experiment) !important;color:var(--interactive-selected)}.filterButtons:hover{color:#fff;background-color:var(--background-modifier-selected)}");
 
 // groupdm/src/groupdm.tsx
-function log_action(action_string, ...rest) {
-  console.log(`%c${action_string}`, "color:red;", ...rest);
-}
 var filter_mode_styles = /* @__PURE__ */ ((filter_mode_styles2) => {
   filter_mode_styles2["GROUP"] = `
 a[aria-label~="(direct"] {
@@ -117,7 +126,7 @@ var groupdm = class {
     BdApi.saveData("groupdm", "isGroup", "DM" /* DM */);
   }
   start() {
-    log_action("[groupdm]", "Started!");
+    log(void 0, "groupdm", "started");
     render_filter_buttons();
   }
   stop() {

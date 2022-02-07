@@ -65,6 +65,18 @@ __export(hide_exports, {
 var React = BdApi.React;
 var react_default = React;
 
+// utils/bd-utils.ts
+var LOG_STYLES = {
+  color: "#c3c6fc",
+  background: "#2c2c2c",
+  padding: "2px 0.5em",
+  "border-radius": "0.5em",
+  "font-weight": "bold"
+};
+function log(style = LOG_STYLES, prefix, ...output) {
+  console.log(`%c${prefix}`, Object.entries(style).map(([a, b]) => `${a}:${b};`).join(""), ...output);
+}
+
 // hide/src/index.scss
 BdApi.injectCSS("hide-styles", "#toolButton{background:none;padding:0;margin:0;outline:none;position:relative;margin-right:6px}#toolButton #tooltip{visibility:hidden;position:absolute;left:50%;bottom:-8px;transform:translate(-50%, 100%)}#toolButton svg *{fill:var(--interactive-normal)}#toolButton:hover svg *{fill:var(--interactive-hover)}#toolButton:hover #tooltip{visibility:visible}");
 
@@ -181,6 +193,7 @@ var hide = class {
     BdApi.setData("hide", "cameraToggled", false);
   }
   start() {
+    log(void 0, "hide", "started");
     const HeaderBarContainer = BdApi.findModuleByDisplayName("HeaderBarContainer")?.prototype;
     BdApi.Patcher.after("hide", HeaderBarContainer, "renderLoggedIn", (_, __, returnValue) => {
       returnValue.props.toolbar.props.children.push(/* @__PURE__ */ react_default.createElement(ToggleButton, null));

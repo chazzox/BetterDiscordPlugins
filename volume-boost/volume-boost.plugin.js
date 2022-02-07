@@ -86,7 +86,6 @@ var VolumeBooster = class {
   }
   stop() {
     BdApi.Patcher.unpatchAll("volume-boost-slider");
-    log2("Stopped.");
   }
 };
 module.exports = __toCommonJS(src_exports);

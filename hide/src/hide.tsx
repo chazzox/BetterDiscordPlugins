@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Utils from '@utils/bd-utils';
 import './index.scss';
 
 const css_id = 'hide';
@@ -141,6 +142,8 @@ export default class hide {
 		BdApi.setData('hide', 'cameraToggled', false);
 	}
 	start() {
+		Utils.log(undefined, 'hide', 'started');
+
 		const HeaderBarContainer = BdApi.findModuleByDisplayName('HeaderBarContainer')?.prototype;
 		// @ts-expect-error
 		BdApi.Patcher.after('hide', HeaderBarContainer, 'renderLoggedIn', (_: any, __: any, returnValue: any) => {

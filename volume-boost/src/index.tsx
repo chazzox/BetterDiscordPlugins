@@ -28,6 +28,5 @@ export default class VolumeBooster {
 	stop() {
 		// @ts-expect-error
 		BdApi.Patcher.unpatchAll('volume-boost-slider');
-		log('Stopped.');
 	}
 }

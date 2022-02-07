@@ -1,8 +1,5 @@
+import * as Utils from '@utils/bd-utils';
 import './index.scss';
-
-function log_action(action_string: string, ...rest: any[]) {
-	console.log(`%c${action_string}`, 'color:red;', ...rest);
-}
 
 enum filter_mode {
 	GROUP = 'GROUP',
@@ -85,7 +82,7 @@ export default class groupdm {
 		BdApi.saveData('groupdm', 'isGroup', filter_mode.DM);
 	}
 	start() {
-		log_action('[groupdm]', 'Started!');
+		Utils.log(undefined, 'groupdm', 'started');
 		render_filter_buttons();
 	}
 	stop() {
