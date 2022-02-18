@@ -4,6 +4,8 @@ import './index.scss';
 
 const css_id = 'hide';
 
+const CameraMicModule = BdApi.findModuleByProps('toggleLocalMute');
+
 const selectors = [
 	'.nowPlayingColumn-2sl4cE',
 	'.content-3YMskv > .peopleListItem-u6dGxF',
@@ -31,8 +33,7 @@ const selectors = [
 	'div[data-list-id="pins"] > div'
 ];
 
-const HideStyles = `
-${selectors.join(', ')} {
+const HideStyles = `${selectors.join(', ')} {
     display: none;
 }
 
@@ -94,30 +95,12 @@ const ToggleButton = () => {
 			// new value of isHidden
 			const isHidden = !prev;
 
-			const deafenButton = document.querySelector<HTMLElement>('button[aria-label="Deafen"]');
-
 			if (isHidden) {
 				BdApi.injectCSS(css_id, HideStyles);
 				// deafen if not deafened already
-				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'false') deafenButton?.click();
-
-				const cameraOffDom = document.querySelector<HTMLElement>('button[aria-label="Turn off Camera"]');
-				if (cameraOffDom) {
-					cameraOffDom?.click();
-					BdApi.setData('hide', 'cameraToggled', true);
-				}
 			} else {
 				BdApi.clearCSS(css_id);
 				// un-deafen if not un-deafened already
-				if (deafenButton?.attributes?.getNamedItem('aria-checked')?.value == 'true') deafenButton?.click();
-
-				if (BdApi.loadData('hide', 'cameraToggled')) {
-					const cameraOnDom = document.querySelector<HTMLElement>('button[aria-label="Turn on Camera"]');
-					if (cameraOnDom) {
-						cameraOnDom?.click();
-						BdApi.setData('hide', 'cameraToggled', false);
-					}
-				}
 			}
 
 			return isHidden;

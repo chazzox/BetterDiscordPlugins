@@ -79,6 +79,35 @@ projectPaths.map((projectPath) => {
 		);
 	}
 
+	const performancePlugin = {
+		name: 'perf',
+		setup(build) {
+			const label = `  ⚡ build took for '${projectPath}'`;
+			build.onStart(() => {
+				console.time(chalk.green(label));
+			});
+			build.onEnd(() => {
+				console.timeEnd(chalk.green(label));
+			});
+		}
+	};
+
+	const sassPlugin = {
+		name: 'sass',
+		setup(build) {
+			build.onLoad({ filter: /.scss$/ }, (args) => {
+				const { css } = sass.compile(args.path, {
+					style: 'compressed'
+				});
+
+				return {
+					contents: `BdApi.injectCSS('${config.name}-styles', '${css.trim()}')`,
+					loader: 'js'
+				};
+			});
+		}
+	};
+
 	esbuild
 		.build({
 			entryPoints: config.entries.map((p) => path.join(projectPath, p)),
@@ -98,39 +127,14 @@ projectPaths.map((projectPath) => {
 			bundle: true,
 			plugins: [
 				// sass
-				{
-					name: 'sass',
-					setup(build) {
-						build.onLoad({ filter: /.scss$/ }, (args) => {
-							const { css } = sass.compile(args.path, {
-								style: 'compressed'
-							});
-
-							return {
-								contents: `BdApi.injectCSS('${config.name}-styles', '${css.trim()}')`,
-								loader: 'js'
-							};
-						});
-					}
-				},
+				sassPlugin,
 				// build time logs
-				{
-					name: 'perf',
-					setup(build) {
-						const label = `  ⚡ build took for '${projectPath}'`;
-						build.onStart(() => {
-							console.time(chalk.green(label));
-						});
-						build.onEnd(() => {
-							console.timeEnd(chalk.green(label));
-						});
-					}
-				},
+				performancePlugin,
 				// allows the use of the BdApi global
 				// @ts-ignore
 				alias({
-					react: path.resolve(root, './utils/react.ts'),
-					'react-dom': path.resolve(root, './utils/react-dom.ts'),
+					react: path.resolve(root, './utils/react-inject/react.ts'),
+					'react-dom': path.resolve(root, './utils/react-inject/react-dom.ts'),
 					'@utils': path.resolve(root)
 				})
 			]
@@ -163,8 +167,9 @@ function esbuildFail(err) {
 	console.error('🚨', chalk.bgRed('  BUILD FAILED  '), '🚨');
 
 	err.errors.forEach((err) => {
-		console.error('file:', chalk.blue(err.location.file));
+		console.error('\nfile:', chalk.blue(err.location.file));
 		console.error(`line: ${chalk.blue(err.location.line)}, column: ${chalk.blue(err.location.column)}`);
 		console.error(`caused by: ${chalk.blue(err.location.lineText.trim())}`);
+		console.error(`text: ${chalk.blue(err.text)}\n`);
 	});
 }

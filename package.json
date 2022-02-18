@@ -1,14 +1,13 @@
 {
 	"scripts": {
-		"build-all": "node build build volume-boost hide groupdm discordify"
+		"build-all": "node bundle build volume-boost hide groupdm discordify"
 	},
 	"devDependencies": {
 		"@types/bandagedbd__bdapi": "^0.3.3",
 		"esbuild": "^0.14.11",
 		"esbuild-plugin-alias": "^0.2.1",
-		"sass": "^1.47.0"
-	},
-	"dependencies": {
+		"sass": "^1.47.0",
 		"chalk": "^4.0.0"
-	}
+	},
+	"dependencies": {}
 }
